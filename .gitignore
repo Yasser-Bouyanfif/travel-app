@@ -1,0 +1,79 @@
+# === Node ===
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+package-lock.json
+yarn.lock
+.pnpm-debug.log
+
+# === Vite ===
+dist/
+.vite/
+.vitepress/
+.cache/
+*.local
+
+# === Next.js ===
+.next/
+out/
+.vercel/
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# === Environment files ===
+.env
+.env.*
+
+# === Logs ===
+*.log
+logs/
+*.pid
+*.seed
+*.pid.lock
+
+# === OS / Editor junk ===
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*.tmp
+
+# === IDEs ===
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# === Tests / coverage ===
+coverage/
+*.lcov
+
+# === Build output ===
+build/
+public/build/
+*.tsbuildinfo
+
+# === Typescript ===
+*.tsbuildinfo
+
+# === Misc ===
+*.bak
+*.old
+*.orig
+*.rej
+
+# === Playwright / Cypress / Vitest / Jest ===
+.playwright/
+cypress/videos/
+cypress/screenshots/
+test-results/
+coverage/
+*.snap
+
+# === Git ===
+.git/
+.gitattributes

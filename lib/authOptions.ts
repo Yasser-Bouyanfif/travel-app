@@ -5,15 +5,19 @@ import Credentials from "next-auth/providers/credentials"
 import {connectMongoDB} from "@/lib/db";
 import bcrypt from "bcryptjs";
 import User from "@/models/user";
+import CustomMongoDBAdapter from "@/lib/customMongoDbAdapter";
+import clientPromise from "@/lib/mongoClient";
 
 export const {handlers, signIn, signOut, auth} = NextAuth({
 
+    adapter: CustomMongoDBAdapter(clientPromise),
     session: {
         strategy: "jwt"
     },
     secret: process.env.AUTH_SECRET,
     pages: {
         signIn: "/login",
+        signOut: "/"
     },
     providers: [
         GithubProvider({

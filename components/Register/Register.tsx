@@ -1,12 +1,14 @@
 "use client"
 
 import {ChangeEvent, FormEvent, useState} from "react"
-import {useRouter} from "next/navigation";
+import {useRouter, useSearchParams} from "next/navigation";
 import {signIn} from "next-auth/react";
 import {toast} from "sonner";
 
 const Register = () => {
     const router = useRouter()
+    const searchParams = useSearchParams()
+    const callbackUrl = searchParams.get("callbackUrl")
 
     const [formData, setFormData] = useState({
         name: "",
@@ -66,6 +68,7 @@ const Register = () => {
             return
         }
 
+
         const loadingToast = toast.loading("Creating your account...")
         try {
             const resUserExists = await fetch('api/auth/userExists', {
@@ -87,7 +90,7 @@ const Register = () => {
                 return
             }
 
-            const res = await fetch("api/auth/register", {
+            const res1 = await fetch("api/auth/register", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -101,21 +104,30 @@ const Register = () => {
                 })
             })
 
-            if (res.ok) {
+            if (res1?.ok) {
                 toast.success("Account successfully created!", {id: loadingToast})
-                await signIn("credentials", {
-                    name: formData.name,
+
+                const res2 = await signIn("credentials", {
                     email: formData.email,
                     password: formData.password,
                     redirect: false,
                 })
 
-                router.push('/dashboard')
+                if (res2?.ok) {
+                    if (callbackUrl) {
+                        window.location.href = callbackUrl;
+                        toast.dismiss(loadingToast)
+                    } else {
+                        router.push("/dashboard")
+                        toast.dismiss(loadingToast)
+                    }
 
-            } else {
-                toast.error("Registration failed. Please contact customer support.")
+                } else {
+                    toast.error("Registration failed. Please contact customer support.")
+                    toast.dismiss(loadingToast)
+                }
+
             }
-
         } catch (error) {
             console.log(error)
         }
@@ -123,9 +135,9 @@ const Register = () => {
 
     return (
         <form onSubmit={handleSubmit} method="POST">
-            <div className="min-h-screen flex items-center justify-center">
+            <div className="min-h-screen flex items-center justify-center bg-[#ede4e4] border-b-1">
                 <div
-                    className="border-2 border-double border-gray-300 rounded shadow-md rounded-lg p-8 w-full max-w-md">
+                    className="border-2 border-double border-gray-300 rounded shadow-md rounded-lg p-8 w-full max-w-md bg-white">
                     <h1 className="text-2xl font-semibold text-center mb-6 uppercase">Signup</h1>
                     <div className="flex flex-col gap-5 mt-10">
                         <input
@@ -135,6 +147,7 @@ const Register = () => {
                             className={`rounded-2xl p-3 border-2 border-gray-400 rounded ${redInputs.name ? "border-red-500" : ""}`}
                             name="name"
                             value={formData.name}
+                            minLength={2}
                         />
                         <input
                             onChange={handleChange}
@@ -151,6 +164,7 @@ const Register = () => {
                             className={`rounded-2xl p-3 border-2 border-gray-400 rounded ${redInputs.password ? "border-red-500" : ""}`}
                             name="password"
                             value={formData.password}
+                            minLength={6}
                         />
                         <input
                             onChange={handleChange}
@@ -159,9 +173,9 @@ const Register = () => {
                             className={`rounded-2xl p-3 border-2 border-gray-400 rounded ${redInputs.confirmPassword ? "border-red-500" : ""}`}
                             name="confirmPassword"
                             value={formData.confirmPassword}
+                            minLength={6}
                         />
                         <button
-                            type="submit"
                             className="flex-1 bg-gray-700 text-white py-2 px-4 rounded hover:bg-gray-900 transition cursor-pointer">
                             Signup
                         </button>

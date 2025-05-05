@@ -302,6 +302,7 @@ const DashboardPage = () => {
                                 className={`w-full px-4 py-2 border rounded-lg ${profileRedInputs.address ? "border-red-500" : ""}`}
                                 name="address"
                                 value={profileFormData.address}
+                                minLength={6}
                             />
                         </div>
 
@@ -314,6 +315,7 @@ const DashboardPage = () => {
                                 className={`w-full px-4 py-2 border rounded-lg ${profileRedInputs.postalCode ? "border-red-500" : ""}`}
                                 name="postalCode"
                                 value={profileFormData.postalCode}
+                                minLength={3}
                             />
                         </div>
 
@@ -326,6 +328,7 @@ const DashboardPage = () => {
                                 className={`w-full px-4 py-2 border rounded-lg ${profileRedInputs.city ? "border-red-500" : ""}`}
                                 name="city"
                                 value={profileFormData.city}
+                                minLength={3}
                             />
                         </div>
 
@@ -378,6 +381,7 @@ const DashboardPage = () => {
                                 placeholder="New password"
                                 className={`w-full px-4 py-2 border rounded-lg ${passwordRedInputs.newPassword ? "border-red-500" : ""}`}
                                 value={passwordFormData.newPassword}
+                                minLength={6}
                             />
                         </div>
 
@@ -390,6 +394,7 @@ const DashboardPage = () => {
                                 placeholder="Confirm new password"
                                 className={`w-full px-4 py-2 border rounded-lg ${passwordRedInputs.confirmNewPassword ? "border-red-500" : ""}`}
                                 value={passwordFormData.confirmNewPassword}
+                                minLength={6}
                             />
                         </div>
 

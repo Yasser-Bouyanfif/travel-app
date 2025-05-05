@@ -1,47 +1,51 @@
-import mongoose, {Model, models, Schema} from "mongoose"
+import mongoose, {Document, Model, models, Schema} from "mongoose";
 
 interface IUser extends Document {
-    name: string,
-    email: string,
-    password: string,
-    address?: null,
-    postalCode?: null,
-    city?: null,
-    country?: null
+    name: string;
+    email: string;
+    password: string;
+    address?: string | null;
+    postalCode?: string | null;
+    city?: string | null;
+    country?: string | null;
 }
 
-const userSchema = new Schema<IUser>({
-    name: {
-        type: String,
-        required: true
+const userSchema = new Schema<IUser>(
+    {
+        name: {
+            type: String,
+            required: true
+        },
+        email: {
+            type: String,
+            required: true,
+            unique: true
+        },
+        password: {
+            type: String,
+            required: true
+        },
+        address: {
+            type: String,
+            default: null
+        },
+        postalCode: {
+            type: String,
+            default: null
+        },
+        city: {
+            type: String,
+            default: null
+        },
+        country: {
+            type: String,
+            default: null
+        }
     },
-    email: {
-        type: String,
-        required: true,
-        unique: true
-    },
-    password: {
-        type: String,
-        required: true
-    },
-    address: {
-        type: String,
-        default: null
-    },
-    postalCode: {
-        type: String,
-        default: null
-    },
-    city: {
-        type: String,
-        default: null
-    },
-    country: {
-        type: String,
-        default: null
-    },
-}, {timestamps: true})
+    {timestamps: true}
+)
 
-const User: Model<IUser> = (models.User as Model<IUser>) || mongoose.model("User", userSchema)
+const User: Model<IUser> =
+    (models.User as Model<IUser>) || mongoose.model<IUser>("User", userSchema)
 
 export default User

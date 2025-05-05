@@ -1,13 +1,14 @@
 "use client"
 import Link from "next/link";
-import {login} from "@/actions/auth";
 import {ChangeEvent, FormEvent, useRef, useState} from "react"
 import {signIn} from "next-auth/react";
-import {useRouter} from "next/navigation";
 import {toast} from "sonner"
+import {useRouter, useSearchParams} from "next/navigation";
 
 const Login = () => {
     const router = useRouter()
+    const searchParams = useSearchParams()
+    const callbackUrl = searchParams.get("callbackUrl")
 
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
@@ -43,16 +44,21 @@ const Login = () => {
             const res = await signIn("credentials", {
                 email,
                 password,
-                redirect: false
+                redirect: false,
             })
 
-            if (res.error) {
-                toast.error("Invalid email or password.")
-                return
+            if (res?.ok) {
+                if (callbackUrl) {
+                    window.location.href = callbackUrl;
+                } else {
+                    router.push("/dashboard")
+                    toast.dismiss(loadingToast)
+                }
+            } else if (res?.error) {
+                toast.error("Invalid email or password.");
+                toast.dismiss(loadingToast);
             }
 
-            toast.dismiss(loadingToast)
-            router.push("/dashboard")
         } catch (error) {
             console.log(error)
         }
@@ -61,9 +67,9 @@ const Login = () => {
     return (
         <>
             <form onSubmit={handleSubmit} method="POST" ref={formRef}>
-                <div className="min-h-screen flex items-center justify-center">
+                <div className="min-h-screen flex items-center justify-center bg-[#ede4e4] border-b-1">
                     <div
-                        className="border-2 border-double border-gray-300 rounded shadow-md rounded-lg p-8 w-full max-w-md">
+                        className="border-2 border-double border-gray-300 rounded shadow-md rounded-lg p-8 w-full max-w-md bg-white">
                         <h1 className="text-2xl font-semibold text-center mb-6 uppercase">Login</h1>
                         <div className="flex flex-col gap-5 mt-10">
                             <input
@@ -85,17 +91,18 @@ const Login = () => {
                             </button>
                             <div className="flex justify-between space-x-4">
                                 <button
-                                    onClick={() => login("github")}
+                                    onClick={() => signIn("github", {callbackUrl: callbackUrl ? `/redirect?callbackURL=${encodeURIComponent(callbackUrl)}` : "/dashboard"})}
                                     className="flex-1 bg-[#8c8c8c] text-white py-2 px-4 rounded hover:bg-[#808080] transition cursor-pointer">
                                     Login with Github
                                 </button>
                                 <button
-                                    onClick={() => login("google")}
+                                    onClick={() => signIn("google", {callbackUrl: callbackUrl ? `/redirect?callbackURL=${encodeURIComponent(callbackUrl)}` : "/dashboard"})}
                                     className="flex-1 bg-[#ff4d4d] text-white py-2 px-4 rounded hover:bg-[#ff3333] transition cursor-pointer">
                                     Login with Google
                                 </button>
                             </div>
-                            <Link href="register">
+                            <Link
+                                href={callbackUrl ? `/register?callbackUrl=${encodeURIComponent(callbackUrl)}` : "/register"}>
                                 <p className="my-3 text-center underline text-gray-800 hover:text-gray-600">Don't you
                                     have
                                     an account?</p>

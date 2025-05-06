@@ -25,13 +25,13 @@ const ContactPage = () => {
   useEffect(() => {
     const user = session?.data?.user;
     if (user) {
-      setFormData({
-        ...formData,
+      setFormData((prev) => ({
+        ...prev,
         name: user.name || "",
         email: user.email || "",
-      });
+      }));
     }
-  }, []);
+  }, [session?.data?.user]);
 
   const handleChange = (
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>,

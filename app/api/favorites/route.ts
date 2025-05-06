@@ -1,56 +1,30 @@
-import {NextRequest, NextResponse} from "next/server";
-import Hotel from "@/models/hotel";
+import { NextRequest, NextResponse } from "next/server";
+import Hotel, { IHotel } from "@/models/hotel";
 
 export async function POST(req: NextRequest) {
-    interface Favorite {
-        id: number,
-        startDate: string,
-        endDate: string
-    }
+  interface Favorite {
+    id: number;
+    startDate: string;
+    endDate: string;
+  }
 
-    interface Room {
-        id: number;
-        name: string;
-        description: string;
-        price_per_night: number;
-        available_dates: string[];
-        max_guests: number;
-        amenities: string[];
-        image: string;
-    }
+  const { stored }: { stored: Favorite[] } = await req.json();
+  const ids = stored.map((fav) => fav.id);
 
-    interface Hotel {
-        id: number;
-        name: string;
-        description: string;
-        address: string;
-        location: string;
-        rating: number;
-        booking_info: object;
-        amenities: string[];
-        images: string[];
-        rooms: Room[];
-    }
+  const hotels = await Hotel.find({ id: { $in: ids } }).lean<IHotel[]>();
 
-    const {stored} = await req.json()
-    const ids = stored.map((obj: Favorite) => obj.id)
+  if (!hotels || hotels.length === 0) {
+    return NextResponse.json({ message: "No results found." }, { status: 404 });
+  }
 
-    const hotels = await Hotel.find({
-        "hotel.id": {$in: ids}
-    }).lean()
+  const cleaned = hotels.map((hotel) => {
+    const match = stored.find((fav) => fav.id === hotel.id);
+    return {
+      ...hotel,
+      startDate: match?.startDate ?? null,
+      endDate: match?.endDate ?? null,
+    };
+  });
 
-    if (!hotels) {
-        return NextResponse.json({message: "Not results found."})
-    }
-
-    const cleaned = hotels.map((obj: { hotel: Hotel, startDate: string, endDate: string }) => {
-        const match = stored.find((fav: Favorite) => fav.id === obj.hotel.id)
-        return {
-            ...obj,
-            startDate: match?.startDate,
-            endDate: match?.endDate
-        }
-    })
-
-    return NextResponse.json(cleaned)
+  return NextResponse.json(cleaned, { status: 200 });
 }

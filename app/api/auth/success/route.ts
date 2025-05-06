@@ -13,9 +13,9 @@ export async function POST(req: NextRequest) {
         const user = await User.findOne({email: userEmail})
 
         const {sessionId}: { sessionId: string } = await req.json()
-        const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
-            apiVersion: '2024-04-10',
-        })
+        const stripeSecretKey = process.env.STRIPE_SECRET_KEY!
+
+        const stripe = new Stripe(stripeSecretKey)
 
         const stripeSession = await stripe.checkout.sessions.retrieve(sessionId, {
             expand: ['line_items.data.price.product'],

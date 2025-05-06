@@ -53,9 +53,13 @@ export async function POST(req: NextRequest) {
         })
 
         if (!session) {
-            return NextResponse.json({
-                redirect: `${baseUrl}/login?callbackUrl=${encodeURIComponent(stripeSession.url)}`
-            })
+            if (stripeSession.url) {
+                return NextResponse.json({
+                    redirect: `${baseUrl}/login?callbackUrl=${encodeURIComponent(stripeSession.url)}`
+                })
+            } else {
+                return NextResponse.json({message: "Stripe session URL is null"}, {status: 500});
+            }
         }
 
         return NextResponse.json({url: stripeSession.url}, {status: 200})

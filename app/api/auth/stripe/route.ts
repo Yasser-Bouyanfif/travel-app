@@ -5,10 +5,7 @@ import Stripe from 'stripe'
 
 export async function POST(req: NextRequest) {
     const stripeSecretKey = process.env.STRIPE_SECRET_KEY!
-
-    if (!stripeSecretKey) {
-        return NextResponse.json({message: "Stripe secret key is missing"}, {status: 500});
-    }
+    const baseUrl = process.env.BASE_URL!
 
     const stripe = new Stripe(stripeSecretKey)
 
@@ -51,13 +48,13 @@ export async function POST(req: NextRequest) {
                 },
             ],
             mode: "payment",
-            success_url: `${process.env.BASE_URL}/success?session_id={CHECKOUT_SESSION_ID}`,
-            cancel_url: `${process.env.BASE_URL}/cancel`,
+            success_url: `${baseUrl}/success?session_id={CHECKOUT_SESSION_ID}`,
+            cancel_url: `${baseUrl}/cancel`,
         })
 
         if (!session) {
             return NextResponse.json({
-                redirect: `${process.env.BASE_URL}/login?callbackUrl=${encodeURIComponent(stripeSession.url)}`
+                redirect: `${baseUrl}/login?callbackUrl=${encodeURIComponent(stripeSession.url)}`
             })
         }
 

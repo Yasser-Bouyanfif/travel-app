@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
         })
 
         return NextResponse.json({message: "Review registered."}, {status: 201})
-    } catch (error) {
+    } catch {
         return NextResponse.json({message: "Registration failed."}, {status: 500})
     }
 }

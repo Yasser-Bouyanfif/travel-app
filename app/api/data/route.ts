@@ -8,7 +8,7 @@ export async function GET() {
         const hotels = await Hotel.find({})
 
         return NextResponse.json(hotels)
-    } catch (error) {
+    } catch {
         return NextResponse.json({error: 'Error fetching data.'}, {status: 500});
     }
 }

@@ -9,7 +9,7 @@ export async function POST(req: NextRequest) {
         await connectMongoDB()
         const session = await auth()
         const userEmail = session?.user.email
-        const user: any = await User.findOne({email: userEmail})
+        const user = await User.findOne({email: userEmail})
         const {id} = await req.json()
 
         if (!user) {
@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
         await Order.deleteOne({_id: id})
         return NextResponse.json({message: "Booking successfully deleted."}, {status: 200})
 
-    } catch (error) {
+    } catch {
         return NextResponse.json({message: "Failed to cancel booking."}, {status: 500})
     }
 }

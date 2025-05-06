@@ -1,9 +1,9 @@
-import {NextRequest, NextResponse} from "next/server";
+import {NextResponse} from "next/server";
 import {connectMongoDB} from "@/lib/db";
 import {auth} from "@/lib/authOptions";
 import User from "@/models/user";
 
-export async function GET(req: NextRequest) {
+export async function GET() {
     await connectMongoDB()
     const session = await auth()
     const user = session?.user

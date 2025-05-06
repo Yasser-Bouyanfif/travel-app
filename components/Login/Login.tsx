@@ -103,7 +103,8 @@ const Login = () => {
                             </div>
                             <Link
                                 href={callbackUrl ? `/register?callbackUrl=${encodeURIComponent(callbackUrl)}` : "/register"}>
-                                <p className="my-3 text-center underline text-gray-800 hover:text-gray-600">Don't you
+                                <p className="my-3 text-center underline text-gray-800 hover:text-gray-600">Don&apos;t
+                                    you
                                     have
                                     an account?</p>
                             </Link>

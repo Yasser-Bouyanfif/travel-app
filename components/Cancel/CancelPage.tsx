@@ -3,12 +3,14 @@
 import {XCircle} from "lucide-react";
 import {useSession} from "next-auth/react";
 import {useRouter} from "next/navigation";
+import Link from "next/link";
+
 
 const CancelPage = () => {
     const session = useSession()
     const router = useRouter()
 
-    if (session.status === "unauthenticated") {
+    if (!session.data?.user) {
         router.push("/")
     }
 
@@ -20,12 +22,12 @@ const CancelPage = () => {
                 <p className="text-gray-600 mb-6">
                     The transaction could not be completed. Please try again or contact support.
                 </p>
-                <a
+                <Link
                     href="/"
                     className="inline-block bg-red-500 text-white px-6 py-2 rounded-lg hover:bg-red-600 transition"
                 >
                     Back to Home
-                </a>
+                </Link>
             </div>
         </div>
     );

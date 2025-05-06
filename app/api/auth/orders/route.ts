@@ -21,7 +21,7 @@ export async function GET(req: NextRequest) {
         const orders = await Order.find({userId}).sort({createdAt: -1})
 
         return NextResponse.json(orders)
-    } catch (error) {
+    } catch {
         return NextResponse.json({message: "Failed to fetch orders."}, {status: 500})
     }
 }

@@ -1,10 +1,13 @@
 import {auth} from "@/lib/authOptions";
-import {NextRequest, NextResponse} from "next/server";
+import {NextRequest, NextResponse} from "next/server"
+import Stripe from 'stripe'
 
 
 export async function POST(req: NextRequest) {
-    const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY)
-    const session: any = await auth()
+    const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string, {
+        apiVersion: '2024-04-10',
+    })
+    const session = await auth()
 
     try {
         const data = await req.json()
@@ -54,8 +57,7 @@ export async function POST(req: NextRequest) {
         }
 
         return NextResponse.json({url: stripeSession.url}, {status: 200})
-    } catch (error) {
-        console.error(error);
+    } catch {
         return NextResponse.json({message: "Stripe session creation failed"}, {status: 500})
     }
 }

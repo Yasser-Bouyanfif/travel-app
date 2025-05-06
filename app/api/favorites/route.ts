@@ -8,6 +8,30 @@ export async function POST(req: NextRequest) {
         endDate: string
     }
 
+    interface Room {
+        id: number;
+        name: string;
+        description: string;
+        price_per_night: number;
+        available_dates: string[];
+        max_guests: number;
+        amenities: string[];
+        image: string;
+    }
+
+    interface Hotel {
+        id: number;
+        name: string;
+        description: string;
+        address: string;
+        location: string;
+        rating: number;
+        booking_info: object;
+        amenities: string[];
+        images: string[];
+        rooms: Room[];
+    }
+
     const {stored} = await req.json()
     const ids = stored.map((obj: Favorite) => obj.id)
 
@@ -19,7 +43,7 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({message: "Not results found."})
     }
 
-    const cleaned = hotels.map((obj: any) => {
+    const cleaned = hotels.map((obj: { hotel: Hotel, startDate: string, endDate: string }) => {
         const match = stored.find((fav: Favorite) => fav.id === obj.hotel.id)
         return {
             ...obj,

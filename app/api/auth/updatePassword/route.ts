@@ -14,10 +14,9 @@ export async function POST(req: NextRequest) {
     }
 
     try {
-        const {currentPassword, newPassword, confirmNewPassword}: {
+        const {currentPassword, newPassword}: {
             currentPassword: string,
             newPassword: string,
-            confirmNewPassword: string
         } = await req.json()
         const passwordsMatch = await bcrypt.compare(currentPassword, user.password)
 

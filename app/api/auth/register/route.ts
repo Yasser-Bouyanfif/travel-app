@@ -29,7 +29,7 @@ export async function POST(req: NextRequest) {
         })
 
         return NextResponse.json({message: "User registered."}, {status: 201})
-    } catch (error) {
+    } catch {
         return NextResponse.json({message: "An error occured while registering the user."}, {status: 500})
     }
 }

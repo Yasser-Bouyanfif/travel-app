@@ -4,7 +4,7 @@ import Stripe from 'stripe'
 
 
 export async function POST(req: NextRequest) {
-    const stripeSecretKey = process.env.STRIPE_SECRET_KEY
+    const stripeSecretKey = process.env.STRIPE_SECRET_KEY!
 
     if (!stripeSecretKey) {
         return NextResponse.json({message: "Stripe secret key is missing"}, {status: 500});

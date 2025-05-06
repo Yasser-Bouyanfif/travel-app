@@ -46,8 +46,8 @@ const SearchPage = () => {
 
     const searchParams = useSearchParams()
     const location = searchParams.get("location")
-    const startDate: any = searchParams.get("startDate")
-    const endDate: any = searchParams.get("endDate")
+    const startDate = searchParams.get("startDate")
+    const endDate = searchParams.get("endDate")
 
     useEffect(() => {
 

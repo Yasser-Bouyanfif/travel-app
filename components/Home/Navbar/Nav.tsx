@@ -14,7 +14,7 @@ type Props = {
 }
 
 const Nav = ({openNav}: Props) => {
-    const {data: session, status} = useSession()
+    const {session} = useSession()
     const [navBg, setNavBg] = useState<boolean>(false)
 
     useEffect(() => {

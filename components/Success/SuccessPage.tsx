@@ -113,6 +113,8 @@ const SuccessPage = () => {
                   src={roomData.image}
                   alt={roomData.name}
                   className="w-full h-full object-cover"
+                  width={800}
+                  height={600}
                 />
               </div>
               <div className="p-4 flex-1">

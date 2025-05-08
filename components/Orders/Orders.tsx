@@ -30,9 +30,11 @@ const OrdersPage = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [orders, setOrders] = useState<Order[]>([]);
 
-  if (session.status === "unauthenticated") {
-    router.push("/login");
-  }
+  useEffect(() => {
+    if (session.status === "unauthenticated") {
+      router.push("/login");
+    }
+  }, [session.status, router]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -134,6 +136,8 @@ const OrdersPage = () => {
                     src={imageUrl}
                     alt="Room"
                     className="w-full h-full object-cover"
+                    width={800}
+                    height={600}
                   />
                 )}
               </div>

@@ -15,6 +15,7 @@ type Props = {
 
 const Nav = ({ openNav }: Props) => {
   const session = useSession();
+  const user = session.data?.user;
   const [navBg, setNavBg] = useState<boolean>(false);
 
   useEffect(() => {
@@ -57,19 +58,19 @@ const Nav = ({ openNav }: Props) => {
           })}
         </div>
         <div className="flex items-center space-x-4">
-          <Link href={session ? "/dashboard" : "/login"}>
+          <Link href={user ? "/dashboard" : "/login"}>
             <button
               className="md:px-12 md:py-2.5 px-8 py-2 text-black text-base bg-white
                             hover:bg-gray-200 transition-all duration-200 rounded-lg cursor-pointer flex items-center gap-2"
             >
               <div className="hidden md:flex items-center space-x-4">
                 {" "}
-                {session ? "Profile" : "Login"}{" "}
+                {user ? "Profile" : "Login"}{" "}
               </div>
               <CgProfile />
             </button>
           </Link>
-          {session && (
+          {user && (
             <button
               onClick={() => signOut({ callbackUrl: "/" })}
               className="md:px-6 md:py-3.5 px-8 py-2 bg-white hover:bg-gray-200 transition-all

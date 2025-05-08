@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import Hotel, { IHotel } from "@/models/hotel";
+import { connectMongoDB } from "@/lib/db";
 
 export async function POST(req: NextRequest) {
   interface Favorite {
@@ -8,23 +9,26 @@ export async function POST(req: NextRequest) {
     endDate: string;
   }
 
-  const { stored }: { stored: Favorite[] } = await req.json();
-  const ids = stored.map((fav) => fav.id);
+  const { stored } = await req.json();
+  const ids = stored.map((obj: Favorite) => obj.id);
 
-  const hotels = await Hotel.find({ id: { $in: ids } }).lean<IHotel[]>();
+  await connectMongoDB();
+  const hotels = await Hotel.find({
+    "hotel.id": { $in: ids },
+  }).lean(<IHotel[]>[]);
 
-  if (!hotels || hotels.length === 0) {
-    return NextResponse.json({ message: "No results found." }, { status: 404 });
+  if (!hotels) {
+    return NextResponse.json({ message: "Not results found." });
   }
 
-  const cleaned = hotels.map((hotel) => {
-    const match = stored.find((fav) => fav.id === hotel.id);
+  const cleaned = hotels.map((obj) => {
+    const match = stored.find((fav: Favorite) => fav.id === obj.hotel.id);
     return {
-      ...hotel,
-      startDate: match?.startDate ?? null,
-      endDate: match?.endDate ?? null,
+      ...obj,
+      startDate: match?.startDate,
+      endDate: match?.endDate,
     };
   });
 
-  return NextResponse.json(cleaned, { status: 200 });
+  return NextResponse.json(cleaned);
 }

@@ -150,6 +150,8 @@ const StayPage = () => {
                 src={obj.hotel.images[1]}
                 alt="Main hotel image"
                 className="w-full h-full object-cover"
+                width={800}
+                height={600}
               />
             </div>
             <div className="md:w-1/3 flex flex-col">
@@ -157,11 +159,15 @@ const StayPage = () => {
                 src={obj.hotel.images[2]}
                 alt="Secondary image 1"
                 className="w-full h-1/2 object-cover"
+                width={800}
+                height={600}
               />
               <Image
                 src={obj.hotel.images[3]}
                 alt="Secondary image 2"
                 className="w-full h-1/2 object-cover"
+                width={800}
+                height={600}
               />
             </div>
           </div>

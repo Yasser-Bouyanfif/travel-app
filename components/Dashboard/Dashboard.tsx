@@ -3,10 +3,12 @@
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 const DashboardPage = () => {
   const [activeTab, setActiveTab] = useState<"profile" | "password">("profile");
   const router = useRouter();
+  const session = useSession();
 
   const [data, setData] = useState<UserDataType | null>(null);
 
@@ -38,13 +40,20 @@ const DashboardPage = () => {
   const userDatas = data?.userData;
 
   useEffect(() => {
+    if (session.status === "unauthenticated") {
+      router.push("/login");
+    }
+  }, [session.status, router]);
+
+  useEffect(() => {
     const getInfos = async () => {
       try {
         const res = await fetch("/api/auth/userInfos");
 
         if (!res.ok) {
-          toast.error("User not found.");
+          toast.error("Please sign in to continue.");
           router.push("/login");
+          return;
         }
 
         const datas = await res.json();

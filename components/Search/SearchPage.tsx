@@ -153,6 +153,8 @@ const SearchPage = () => {
                     className="w-full h-60 md:h-full object-cover rounded-lg border-gray-400 border-2"
                     src={obj.hotel.images[0]}
                     alt={obj.hotel.name}
+                    width={800}
+                    height={600}
                   />
                 </div>
 

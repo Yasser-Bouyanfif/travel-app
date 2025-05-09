@@ -36,10 +36,6 @@ const SuccessPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        if (session.status === "unauthenticated") {
-          router.push("/login");
-        }
-
         setLoading(true);
         if (sessionId) {
           const res = await fetch("/api/auth/success", {

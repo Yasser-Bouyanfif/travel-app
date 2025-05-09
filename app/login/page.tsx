@@ -1,20 +1,11 @@
-import Login from "@/components/Login/Login"
-import {auth} from "@/lib/authOptions";
-import {redirect} from "next/navigation";
+import Login from "@/components/Login/Login";
 
 const LoginPage = async () => {
-    const session = await auth()
+  return (
+    <div>
+      <Login />
+    </div>
+  );
+};
 
-    if (session) {
-        redirect("/dashboard")
-    }
-
-    return (
-        <div>
-            <Login/>
-        </div>
-    )
-}
-
-export default LoginPage
-
+export default LoginPage;

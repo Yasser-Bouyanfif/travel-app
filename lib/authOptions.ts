@@ -10,10 +10,12 @@ import clientPromise from "@/lib/mongoClient";
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter: CustomMongoDBAdapter(clientPromise),
+  trustHost: true,
+  debug: true,
   session: {
     strategy: "jwt",
   },
-  secret: process.env.AUTH_SECRET,
+  secret: process.env.NEXTAUTH_SECRET,
   pages: {
     signIn: "/login",
     signOut: "/",

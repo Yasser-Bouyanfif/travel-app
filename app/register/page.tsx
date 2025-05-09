@@ -1,20 +1,11 @@
-import Register from "@/components/Register/Register"
-import {auth} from "@/lib/authOptions";
-import {redirect} from "next/navigation";
+import Register from "@/components/Register/Register";
 
 const RegisterPage = async () => {
-    const session = await auth()
+  return (
+    <div>
+      <Register />
+    </div>
+  );
+};
 
-    if (session) {
-        redirect("/dashboard")
-    }
-
-    return (
-        <div>
-            <Register/>
-        </div>
-    )
-}
-
-export default RegisterPage
-
+export default RegisterPage;

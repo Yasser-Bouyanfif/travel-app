@@ -31,17 +31,7 @@ const OrdersPage = () => {
   const [orders, setOrders] = useState<Order[]>([]);
 
   useEffect(() => {
-    if (session.status === "unauthenticated") {
-      router.push("/login");
-    }
-  }, [session.status, router]);
-
-  useEffect(() => {
     const fetchData = async () => {
-      if (session.status === "unauthenticated") {
-        router.push("/login");
-      }
-
       setLoading(true);
       const res = await fetch("/api/auth/orders");
       const data = await res.json();
@@ -55,10 +45,6 @@ const OrdersPage = () => {
 
   const handleCancel = async (id: string) => {
     try {
-      if (session.status === "unauthenticated") {
-        router.push("/login");
-      }
-
       confirm("Are you sure to cancel the booking ?");
 
       const res = await fetch("api/auth/cancelBooking", {
